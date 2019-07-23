@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AsyncQueue Demo</title>
+    <!-- <script src="./../out/g2.umd.min.js"></script> -->
+    <script src="./../out/g2.umd.js"></script>
+</head>
+
+<body>
+    <script>
+        const queue = g2.asyncQueue();
+        const childQueue = g2.asyncQueue();
+        const cancelledQueue = g2.asyncQueue();
+
+        queue.steps(
+            async (shared) => {
+                shared.step1 = 'Async step 1';
+                debugger;
+                console.log(shared.step1);
+            },
+            async (shared) => {
+                shared.step2 = 'Async step 2';
+                console.log(shared.step2);
+            },
+            async (shared) => {
+                throw 'Comment this exception!';
+            },
+            childQueue
+        );
+        // queue.steps(
+        //     function() {
+        //         this.shared.step1 = 'Step1';
+        //     },
+        //     childQueue,
+        //     function() {
+        //         this.shared.stepMore = 'StepMore';
+        //     },
+        //     function() {
+        //         this.shared.step3 = 'Step3';
+        //         this.cancel();
+        //     },
+        //     cancelledQueue
+        // );
+
+        // childQueue.steps(
+        //     function() {
+        //         this.shared.step2 = 'Step2';
+        //     },
+        //     function() {
+        //         this.cancel();
+        //     },
+        //     function() {
+        //         this.shared.test = 'Test';
+        //     }
+        // );
+
+        // cancelledQueue.steps(function() {
+        //     this.shared.canceled = 'Cancelled';
+        // });
+
+        debugger;
+        queue
+            .exec()
+            .then((result) => {
+                console.log('Good.', result);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+        debugger;
+        console.log('Must be async');
+    </script>
+
+</body>
+
+</html>

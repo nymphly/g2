@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SyncQueue Demo</title>
+    <script src="./../out/g2.umd.min.js"></script>
+</head>
+
+<body>
+    <script>
+        const queue = g2.syncQueue();
+        const childQueue = g2.syncQueue();
+        const cancelledQueue = g2.syncQueue();
+        queue.steps(
+            function() {
+                this.shared.step1 = 'Step1';
+            },
+            childQueue,
+            function() {
+                this.shared.stepMore = 'StepMore';
+            },
+            function() {
+                this.shared.step3 = 'Step3';
+                this.cancel();
+            },
+            cancelledQueue
+        );
+
+        childQueue.steps(
+            function() {
+                this.shared.step2 = 'Step2';
+            },
+            function() {
+                this.cancel();
+            },
+            function() {
+                this.shared.test = 'Test';
+            }
+        );
+
+        cancelledQueue.steps(function() {
+            this.shared.canceled = 'Cancelled';
+        });
+
+        queue.exec();
+        console.log(queue.shared);
+    </script>
+
+</body>
+
+</html>
