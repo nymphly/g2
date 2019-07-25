@@ -82,8 +82,14 @@ export class AsyncQueue {
                     throw 'Current implementation doesn\'t support not async functions in AsyncQueue. Please, fix it.';
                 }
             } else { //Step is queue.
+                step.shared = this.shared;
                 return step.exec()
-                    .then(() => this.runStep_(++index));
+                    .then(() => this.runStep_(++index))
+                    .catch(e => {
+                        return (e === 'canceled') ?
+                            this.runStep_(++index) :
+                            Promise.reject(e);
+                    });
             }
         }
         return Promise.resolve('complete');

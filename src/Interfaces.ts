@@ -1,3 +1,5 @@
+import { Stage } from "./svg/Stage";
+
 /**
  * @fileoverview 
  * Intefaces storage.
@@ -24,4 +26,13 @@ export interface IRenderable extends IDisposable {
  */
 export interface IStorage {
     [key: string]: any;
+}
+
+export interface IClass {
+    prototype: IStorage;
+}
+
+export interface IElement extends IRenderable {
+    stage: Stage;
+    uid: string;
 }

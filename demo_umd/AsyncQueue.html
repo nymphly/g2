@@ -17,17 +17,20 @@
         queue.steps(
             async (shared) => {
                 shared.step1 = 'Async step 1';
-                debugger;
                 console.log(shared.step1);
             },
             async (shared) => {
                 shared.step2 = 'Async step 2';
                 console.log(shared.step2);
             },
+            // async (shared) => {
+            //     throw 'Comment this exception!';
+            // },
+            childQueue,
             async (shared) => {
-                throw 'Comment this exception!';
-            },
-            childQueue
+                shared.afterCancel = 'Child queue was canceled';
+                console.log(shared.afterCancel);
+            }
         );
         // queue.steps(
         //     function() {
@@ -44,23 +47,26 @@
         //     cancelledQueue
         // );
 
-        // childQueue.steps(
-        //     function() {
-        //         this.shared.step2 = 'Step2';
-        //     },
-        //     function() {
-        //         this.cancel();
-        //     },
-        //     function() {
-        //         this.shared.test = 'Test';
-        //     }
-        // );
+        childQueue.steps(
+            async (shared) => {
+                shared.step3 = 'Async Step3 from child queue';
+                console.log(shared.step3);
+            },
+            async function(shared) {
+                debugger;
+                console.log('CANCELLING CHILD QUEUE!');
+                this.cancel();
+            },
+            async (shared) => {
+                shared.canceled = 'Must be canceled';
+                console.log(shared.canceled);
+            }
+        );
 
         // cancelledQueue.steps(function() {
         //     this.shared.canceled = 'Cancelled';
         // });
 
-        debugger;
         queue
             .exec()
             .then((result) => {
@@ -69,8 +75,7 @@
             .catch(e => {
                 console.log(e);
             });
-        debugger;
-        console.log('Must be async');
+        console.log('Must be async, appears first.');
     </script>
 
 </body>

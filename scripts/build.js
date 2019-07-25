@@ -104,6 +104,7 @@ async function build() {
         generateBundledModule(es5Build, path.join(OUT_DIR, `${G2}.module.js`), 'es', false),
 
         generateBundledModule(es6Build, path.join(OUT_DIR, `${G2}.es6.js`), 'es', false),
+        generateBundledModule(es6Build, path.join(OUT_DIR, `${G2}.es6.min.js`), 'es', true),
 
         generateBundledModule(es5Build, path.join(OUT_DIR, `${G2}.umd.js`), 'umd', false),
         generateBundledModule(es5Build, path.join(OUT_DIR, `${G2}.umd.min.js`), 'umd', true)

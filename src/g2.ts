@@ -5,15 +5,14 @@ import { SyncQueue } from './queue/SyncQueue';
 import { AsyncQueue } from './queue/AsyncQueue';
 
 declare const window: any;
-export const G2_GLOBAL = window || global; //NodeJs support.
+export const G2_GLOBAL = window || global; //TODO NodeJs support. Do we really need it? What about SSR?
 
-export function create(container: (HTMLElement|string) = 'container', width: StringOrNumber = '100%', height: StringOrNumber = '100%'): Nullable<Stage> {
+export function stage(container: (HTMLElement|string) = 'container', width: StringOrNumber = '100%', height: StringOrNumber = '100%'): Nullable<Stage> {
     const cont: (Nullable<HTMLElement>) = DOM.getElement(container);
     if (cont) {
         return new Stage(cont, width, height);
     }
-    console.error('Container for stage is not set correctly');
-    return null;
+    throw 'Container for stage is not set correctly, please fix it.';
 }
 
 export function syncQueue(shared: any = {}): SyncQueue {

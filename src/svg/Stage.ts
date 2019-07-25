@@ -1,5 +1,7 @@
 import { IRenderable } from "./../Interfaces";
 import { Nullable, StringOrNumber } from "../Types";
+import { inject } from "../utils/injections";
+import { DOM } from "../utils/DOM";
 
 export class Stage implements IRenderable {
     constructor(
@@ -9,13 +11,27 @@ export class Stage implements IRenderable {
 
     }
 
-    render(): Stage {
+    public render(): Stage {
+
+        // let stage: SVGElement = DOM.createSVGElement('svg');
+        //     cont.appendChild(stage);
+        //     utils.addResizeHandler(cont);
+
+
         console.log(this.container_);
         // TODO implement.
         return this;
     }
 
-    dispose(): void {
+    public dispose(): void {
         this.container_ = null;
     }
 }
+
+/**
+ * TODO Test inection, remove it later.
+ */
+inject(Stage, 'testRender', function(this: Stage): Stage {
+    this.render();
+    return this;
+})

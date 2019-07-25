@@ -6,14 +6,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup -c && tsc",
-    "buildAll": "node scripts/build.js"
+    "buildAll": "node scripts/build.js",
+    "server": "node node_modules/http-server/bin/http-server -p 4321"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nymphly/g2.git"
+  },
+  "author": "Alexander Kudryavtsev",
+  "license": "MIT",
   "browser": "out/g2.min.js",
   "dependencies": {},
   "devDependencies": {
     "fs-extra": "^8.1.0",
+    "http-server": "^0.11.1",
     "rollup": "^1.16.2",
     "rollup-plugin-filesize": "^6.1.1",
     "rollup-plugin-node-resolve": "^5.2.0",
