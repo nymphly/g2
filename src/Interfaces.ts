@@ -1,4 +1,5 @@
 import { Stage } from "./svg/Stage";
+import { Nullable } from "./Types";
 
 /**
  * @fileoverview 
@@ -11,6 +12,9 @@ export interface IDisposable {
 
 export interface IRenderable extends IDisposable {
     render(): IRenderable;
+    mark(state: number): void;
+    unmark(state: number): void;
+    domElement: Nullable<SVGElement>;
 }
 
 /**
@@ -28,11 +32,15 @@ export interface IStorage {
     [key: string]: any;
 }
 
+export interface ITypedStorage<T> {
+    [key: string]: T;
+}
+
 export interface IClass {
     prototype: IStorage;
 }
 
 export interface IElement extends IRenderable {
     stage: Stage;
-    uid: string;
+    readonly uid: string;
 }

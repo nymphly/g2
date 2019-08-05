@@ -3,6 +3,7 @@ import { DOM } from './utils/DOM';
 import { Nullable, StringOrNumber } from './Types';
 import { SyncQueue } from './queue/SyncQueue';
 import { AsyncQueue } from './queue/AsyncQueue';
+import { SVG } from './utils/SVG';
 
 declare const window: any;
 export const G2_GLOBAL = window || global; //TODO NodeJs support. Do we really need it? What about SSR?
@@ -22,3 +23,6 @@ export function syncQueue(shared: any = {}): SyncQueue {
 export function asyncQueue(shared: any = {}): AsyncQueue {
     return new AsyncQueue(shared);
 }
+
+export {DOM};
+export {SVG};

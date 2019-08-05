@@ -1,3 +1,5 @@
+const { dependencies } = require('./../package.json');
+
 const { rollup } = require('rollup');
 const resolvePlugin = require('rollup-plugin-node-resolve');
 const filesizePlugin = require('rollup-plugin-filesize');
@@ -58,7 +60,11 @@ async function generateBundledModule(inputFile, outputFile, format, production) 
     const plugins =
         production ?
             [
-                resolvePlugin(),
+                resolvePlugin({
+                    customResolveOptions: {
+                        moduleDirectory: 'node_modules'
+                    }
+                }),
                 replacePlugin({ "process.env.NODE_ENV": JSON.stringify("production") }),
                 terserPlugin(),
                 filesizePlugin()
@@ -70,6 +76,7 @@ async function generateBundledModule(inputFile, outputFile, format, production) 
 
     const bundle = await rollup({
         input: inputFile,
+        // external: Object.keys(dependencies),
         plugins
     });
 
@@ -78,7 +85,8 @@ async function generateBundledModule(inputFile, outputFile, format, production) 
         format,
         banner: '/** AC Test build */',
         exports: 'named',
-        name: format == 'umd' ? G2 : void 0
+        name: format == 'umd' ? G2 : void 0,
+        globals: {'tslib': 'tslib'}
     });
 
     console.log(`Generation of ${outputFile} bundle finished.`)

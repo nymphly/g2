@@ -22,11 +22,79 @@
         NOTE: run this demo with 'npm run server' to avoid cross-origin issues accessing g2.    
      -->
     <div id="container"></div>
+
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+    <p>Kind of content</p>
+
     <script type="module">
-        // import * as g2 from './../out/g2.es6.js';
-        import * as g2 from './../out_tmp/es6/g2.js';
+        import * as g2 from './../out/g2.es6.js';
+        // import * as g2 from './../out_tmp/es6/g2.js';
+
         const stage = g2.stage('container');
-        stage.render();
+        const root = stage.layer();
+        const start = performance.now();
+        let counter = 0;
+
+        const asyncStep = async function () {
+            const layer = root.layer();
+            for (let j = 0; j < 5; j++) {
+                const childLayer = layer.layer();
+                for (let i = 0; i < 5; i++) {
+                    counter++;
+                    const pather = g2.SVG.path();
+                    const path = childLayer.path();
+                    g2.DOM.setAttrMap(path.domElement, {
+                        d: pather.moveTo(10, 10).lineTo(300 * Math.random(), 600 * Math.random()).get(),
+                        stroke: 'green',
+                        opacity: 0.5
+                    });
+                }
+            }
+        };
+        const steps = new Array(1000);
+        steps.fill(asyncStep);
+
+        const asyncQueue = g2.asyncQueue();
+        asyncQueue
+            .steps(...steps)
+            .exec()
+            .then(() => {
+                stage.render();
+                console.log(`Took: ${performance.now() - start}ms, paths created: ${counter}`);
+            });
+
     </script>
 </body>
 
