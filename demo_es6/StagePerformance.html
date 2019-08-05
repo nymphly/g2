@@ -60,7 +60,10 @@
 
     <script type="module">
         import * as g2 from './../out/g2.es6.js';
-        // import * as g2 from './../out_tmp/es6/g2.js';
+
+        const QUEUE_STEPS_COUNT = 10;
+        const LAYERS_COUNT = 1;
+        const PATHS_COUNT = 5;
 
         const stage = g2.stage('container');
         const root = stage.layer();
@@ -69,29 +72,29 @@
 
         const asyncStep = async function () {
             const layer = root.layer();
-            for (let j = 0; j < 5; j++) {
+            for (let j = 0; j < LAYERS_COUNT; j++) {
                 const childLayer = layer.layer();
-                for (let i = 0; i < 5; i++) {
+                for (let i = 0; i < PATHS_COUNT; i++) {
                     counter++;
                     const pather = g2.SVG.path();
                     const path = childLayer.path();
                     g2.DOM.setAttrMap(path.domElement, {
-                        d: pather.moveTo(10, 10).lineTo(300 * Math.random(), 600 * Math.random()).get(),
+                        d: pather.moveTo(0, 0).lineTo(600 * Math.random(), 300 * Math.random()).get(),
                         stroke: 'green',
                         opacity: 0.5
                     });
                 }
             }
         };
-        const steps = new Array(1000);
+        const steps = new Array(QUEUE_STEPS_COUNT);
         steps.fill(asyncStep);
 
         const asyncQueue = g2.asyncQueue();
         asyncQueue
-            .steps(...steps)
+            .setSteps(...steps)
             .exec()
             .then(() => {
-                stage.render();
+                // stage.render();
                 console.log(`Took: ${performance.now() - start}ms, paths created: ${counter}`);
             });
 

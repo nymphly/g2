@@ -1,30 +1,21 @@
 import { Stage } from "./Stage";
-import { IElement, IRenderable } from "../Interfaces";
+import { IElement, IRenderable, IQueue } from "../Interfaces";
 import { utils } from "../utils";
 import { Nullable } from "../Types";
 import { DOM } from "../utils/DOM";
+import { SyncQueue } from "../queue/SyncQueue";
+import { AsyncQueue } from "../queue/AsyncQueue";
 
 export abstract class G2Element implements IElement {
     uid: string;
-    domElement: Nullable<SVGElement> = null;
+    public domElement: Nullable<SVGElement> = null;
+    public queue: Nullable<IQueue> = null;
     
     constructor(public stage: Stage, public parent: Nullable<G2Element>) {
         this.uid = utils.getUid();
         this.stage.children[this.uid] = this;
         this.domElement = this.createDom();
-    }
 
-    public abstract createDom(): SVGElement;
-
-    mark(): void {
-        //TODO Implement.
-    }
-
-    unmark(): void {
-        //TODO Implement.
-    }
-
-    public render(): G2Element {
         const el: SVGElement = <SVGElement>this.domElement;
         const parentDom: SVGElement = this.parent ?
             <SVGElement>(<G2Element>this.parent).domElement :
@@ -32,7 +23,19 @@ export abstract class G2Element implements IElement {
         if (!el.parentElement) {
             DOM.setParent(el, parentDom);
         }
-        return this;
+    }
+
+    public abstract createDom(): SVGElement;
+
+    public render(): Promise<any> {
+        if (this.queue && !this.queue.isEmpty) {
+            if (this.queue instanceof SyncQueue) {
+                this.queue.exec();
+            } else {
+                return (<AsyncQueue>this.queue).exec();
+            }
+        }
+        return Promise.resolve();
     }
 
     public dispose(): void {

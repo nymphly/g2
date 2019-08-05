@@ -1,15 +1,18 @@
-import { IRenderable, ITypedStorage } from "./../Interfaces";
+import { IRenderable, ITypedStorage, IQueue } from "./../Interfaces";
 import { Nullable, StringOrNumber } from "../Types";
 import { inject } from "../utils/injections";
 import { DOM } from "../utils/DOM";
 import { G2Element } from "./G2Element";
 import { utils } from "../utils";
 import { Layer } from "./Layer";
+import { SyncQueue } from "../queue/SyncQueue";
+import { AsyncQueue } from "../queue/AsyncQueue";
 
 export class Stage implements IRenderable {
-    domElement: Nullable<SVGElement> = null;
-    children: ITypedStorage<G2Element> = {};
-    container: Nullable<HTMLElement> = null;
+    public domElement: Nullable<SVGElement> = null;
+    public children: ITypedStorage<G2Element> = {};
+    public container: Nullable<HTMLElement> = null;
+    public queue: Nullable<IQueue> = null;
 
     constructor(container: HTMLElement, public width: StringOrNumber = '100%', public height: StringOrNumber = '100%') {
         this.container = container;
@@ -30,30 +33,35 @@ export class Stage implements IRenderable {
         // }, { passive: true });
     }
 
-    mark(state: number) {
-        //does nothing
-    }
-
-    unmark(state: number) {
-        //does nothing
-    }
-
     public layer() {
         return new Layer(this, null);
     }
 
-    public render(): Stage {
-        if (this.container) {
-            for (let key in this.children) {
-                this.children[key].render();
-            }
-            // DOM.addResizeHandler(this.container);
-        } else {
+    private renderChildren_(): Promise<any> {
+        const proms = [];
+        for (let key in this.children) {
+            proms.push(this.children[key].render());
+        }
+        return Promise.all(proms);
+    }
+
+    public render(): Promise<any> {
+        if (!this.container) {
             //TODO Replace with warning without exception.
             throw 'Stage container is not specified, please fix it.';
         }
 
-        return this;
+        if (this.queue && !this.queue.isEmpty()) {
+            if (this.queue instanceof SyncQueue) {
+                this.queue.exec();
+            } else {
+                return (<AsyncQueue>this.queue)
+                    .exec()
+                    .then(() => this.renderChildren_())
+                    .catch(() => this.renderChildren_());
+            }
+        }
+        return this.renderChildren_();
     }
 
     public dispose(): void {

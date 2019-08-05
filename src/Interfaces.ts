@@ -11,9 +11,8 @@ export interface IDisposable {
 }
 
 export interface IRenderable extends IDisposable {
-    render(): IRenderable;
-    mark(state: number): void;
-    unmark(state: number): void;
+    queue: Nullable<IQueue>;
+    render(): Promise<any>;
     domElement: Nullable<SVGElement>;
 }
 
@@ -43,4 +42,15 @@ export interface IClass {
 export interface IElement extends IRenderable {
     stage: Stage;
     readonly uid: string;
+}
+
+export interface IQueue {
+    steps: Array<IQueue|Function>;
+    parentQueue: Nullable<IQueue>;
+    setSteps(...steps: (IQueue|Function)[]): IQueue;
+    cancel(): IQueue;
+    isCanceled(val?: boolean): boolean|IQueue;
+    dispose(): void;
+    isEmpty(): boolean;
+    exec(): IQueue|Promise<any> //TODO define any.
 }

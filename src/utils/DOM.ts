@@ -15,7 +15,7 @@ export namespace DOM {
 
     /**
      * 
-     * @param name - Name of element.
+     * @param name - Tag.
      */
     export function createSVGElement(name: string): SVGElement {
         return G2_GLOBAL.document.createElementNS(SVG_NS, name);
@@ -31,8 +31,9 @@ export namespace DOM {
 
     export function setAttrMap(el: Element, map: Nullable<IStorage>, addPrefix?: boolean): Element {
         if (map) {
-            for (let key in map) {
-                attr(el, key, map[key], addPrefix);
+            for (let key in map) { //This cycle does not create iterator, it's faster then forOf.
+                if (key.indexOf('g2_uid_')) //Skipping potential uid.
+                    attr(el, key, map[key], addPrefix);
             }
         }
         return el;
