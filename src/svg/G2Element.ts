@@ -11,7 +11,7 @@ export abstract class G2Element implements IElement {
     public domElement: Nullable<SVGElement> = null;
     public queue: Nullable<IQueue> = null;
     
-    constructor(public stage: Stage, public parent: Nullable<G2Element>) {
+    constructor(public stage: Stage, public parent?: Nullable<G2Element>) {
         this.uid = utils.getUid();
         this.stage.children[this.uid] = this;
         this.domElement = this.createDom();
@@ -28,7 +28,11 @@ export abstract class G2Element implements IElement {
     public abstract createDom(): SVGElement;
 
     public render(): Promise<any> {
-        if (this.queue && !this.queue.isEmpty) {
+        /*
+            TODO: think of nullifying queue on render to avoid
+            queue execuon on next rendering.
+         */
+        if (this.queue && !this.queue.isEmpty()) {
             if (this.queue instanceof SyncQueue) {
                 this.queue.exec();
             } else {

@@ -7,12 +7,14 @@ import { utils } from "../utils";
 import { Layer } from "./Layer";
 import { SyncQueue } from "../queue/SyncQueue";
 import { AsyncQueue } from "../queue/AsyncQueue";
+import { Style } from "./Style";
 
 export class Stage implements IRenderable {
     public domElement: Nullable<SVGElement> = null;
     public children: ITypedStorage<G2Element> = {};
     public container: Nullable<HTMLElement> = null;
     public queue: Nullable<IQueue> = null;
+    public style: Nullable<Style> = null;
 
     constructor(container: HTMLElement, public width: StringOrNumber = '100%', public height: StringOrNumber = '100%') {
         this.container = container;
@@ -24,6 +26,10 @@ export class Stage implements IRenderable {
             height: this.height
         });
         this.container.appendChild(this.domElement);
+
+        this.style = new Style(this);
+
+
         // DOM.addResizeHandler(this.container);
         // const self = this;
         // this.container.addEventListener('resize', (e) => {
@@ -34,7 +40,7 @@ export class Stage implements IRenderable {
     }
 
     public layer() {
-        return new Layer(this, null);
+        return new Layer(this);
     }
 
     private renderChildren_(): Promise<any> {

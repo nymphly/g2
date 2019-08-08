@@ -42,6 +42,7 @@ export interface IClass {
 export interface IElement extends IRenderable {
     stage: Stage;
     readonly uid: string;
+    queue: Nullable<IQueue>;
 }
 
 export interface IQueue {
