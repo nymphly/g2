@@ -25,7 +25,7 @@ By idea, it must be lighweight fast tool for SVG-rendering purposes:
 - Despite G2 still uses wrappers (like G2Element or stage) over real DOM-elements, wrapper creates dom-element immediately. 
 - It is pretty fast if developer follows browser's lifecycle and avoids forced reflow like https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing
 - All detached operations over DOM-element must be preformed by setting queue. Stage.render() actually executes child elements' queues. It is an analogue of clearing elements' consistency states.
-- Don't implement separated util classes for common features with own API. Use simple typed objects instead and make operations in static util functions like: 
+- THIS MUST BE RESERCHED!!!! ~~Don't implement separated util classes for common features with own API. Use simple typed objects instead and make operations in static util functions like~~: 
 ```typescript
 //BAD: 
 class Rect {
@@ -40,3 +40,72 @@ class Rect {
 const rect: Rect = {left: 0, top: 0, width: 0, height: 0};
 const clone = someStaticUtils.clone(rect);
 ```
+
+
+```javascript
+//SOMETHING THAT MUST BE RESEARCHED
+class Rect {
+    constructor(left = 0, top = 0, width = 0, height = 0) {
+		this.left = left;
+		this.top = top;
+		this.width = width;
+		this.height = height;
+    }
+
+    clone() {
+        return new Rect(this.left, this.top, this.width, this.height);
+    }
+}
+
+const Rect1 = function(left, top, width, height) {
+	this.left = left;
+	this.top = top;
+	this.width = width;
+	this.height = height;
+}
+
+Rect1.prototype.clone = function() {
+	return new Rect1(this.left, this.top, this.width, this.height);
+}
+
+function clone(r) {
+ return {left, top, width, height} = r;
+}
+
+const storage1 = [];
+const storage2 = [];
+const storage3 = [];
+
+const st1 = performance.now();
+for (let i = 0; i < 1000000; i++) {
+ const r = new Rect(Math.random(), Math.random(), Math.random(), Math.random());
+ const cl = r.clone();
+ storage1.push(cl);
+}
+console.log(performance.now() - st1);
+
+const st2 = performance.now();
+for (let i = 0; i < 1000000; i++) {
+ const r = {left: Math.random(),top: Math.random(), width: Math.random(), height: Math.random()};
+ const cl = clone(r);
+ storage2.push(cl);
+}
+console.log(performance.now() - st2);
+
+const st3 = performance.now();
+for (let i = 0; i < 1000000; i++) {
+ const r = new Rect1(Math.random(), Math.random(), Math.random(), Math.random());
+ const cl = clone(r);
+ storage3.push(cl);
+}
+console.log(performance.now() - st3);
+
+//OUTPUT:
+798
+1620
+3058
+```
+
+#G2 current dev tips
+This section contains feateures to be inpmlemented or currently implemented and must be tipped.
+- 
