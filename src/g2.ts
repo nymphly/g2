@@ -3,11 +3,11 @@ import { DOM } from './utils/DOM';
 import { Nullable, StringOrNumber } from './Types';
 import { SyncQueue } from './queue/SyncQueue';
 import { AsyncQueue } from './queue/AsyncQueue';
-import { SVG } from './utils/SVG';
 import { G2Element } from './svg/G2Element';
 import { Layer } from './svg/Layer';
 import { Path } from './svg/Path';
 import { inject } from './utils/injections';
+import * as ext from './extensions/ext';
 
 declare const window: any;
 export const G2_GLOBAL = window || global; //TODO NodeJs support. Do we really need it? What about SSR?
@@ -30,12 +30,12 @@ export function asyncQueue(shared: any = {}): AsyncQueue {
 
 export {
     DOM, 
-    SVG, 
     SyncQueue,
     AsyncQueue,
     Stage,
     G2Element,
     Layer,
     Path,
-    inject
+    inject,
+    ext
 };

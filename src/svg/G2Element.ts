@@ -43,7 +43,7 @@ export abstract class G2Element implements IElement {
     }
 
     public dispose(): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Unimplemented G2Element disposing.');
     }
     
 }

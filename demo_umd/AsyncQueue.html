@@ -15,7 +15,7 @@
         const cancelledQueue = g2.asyncQueue();
 
         queue.steps(
-            async (shared) => {
+            async (shared) =>  {
                 shared.step1 = 'Async step 1';
                 console.log(shared.step1);
             },

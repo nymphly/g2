@@ -6,7 +6,7 @@ import { Nullable } from "./Types";
  * Intefaces storage.
  */
 
-export interface IDisposable {
+export interface IDisposable extends IStorage{
     dispose(): void;
 }
 

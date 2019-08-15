@@ -132,27 +132,26 @@
 
         const stage = g2.stage('container');
         const root = stage.layer();
-
         const path = root.path();
+        const pather = g2.ext.pather();
+        pather
+            .moveTo(10, 10)
+            .lineTo(10, 100)
+            .lineTo(100, 100)
+            .lineTo(100, 10)
+            .close()
+            .applyTo(path);
 
-        const style = stage.style;
-
-        const className = style.add({
-            'stroke': 'green',
-            'stroke-width': '10px'
-        });
-
-        style
-            .render()
-            .then(() => {
-                g2.DOM.setAttrMap(path.domElement, {
-                    'class': className,
-                    'd': 'M 0 0 L 100 100'
-                });
-            })
-            .catch(e => {
-                console.log(e)
-            });     
+        const lgConfig = {
+            stops: [
+                {'stop-color': 'red', offset: 0},
+                {'stop-color': 'green', offset: 0.5},
+                {'stop-color': 'blue', offset: 1}
+            ]
+        };
+        
+        const id = g2.ext.fill.linearGradient(path, lgConfig);
+        console.log(id);
 
     </script>
 </body>

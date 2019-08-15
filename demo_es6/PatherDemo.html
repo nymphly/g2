@@ -23,6 +23,8 @@
      -->
     <div id="container"></div>
 
+    
+
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sem nibh, imperdiet eget commodo at, interdum mattis
         leo. Nullam fringilla sit amet justo quis mollis. Mauris tempus rutrum odio, eu eleifend libero lacinia nec.
         Nunc sodales vulputate eros, a sollicitudin augue fermentum id. Curabitur purus diam, mollis nec enim ac,
@@ -130,29 +132,30 @@
     <script type="module">
         import './../out/g2.es6.umd.js';
 
-        const stage = g2.stage('container');
+        const stage = g2.stage('container', 600, 400);
         const root = stage.layer();
-
+        
         const path = root.path();
+        g2.DOM.attr(path.domElement, 'stroke', 'blue');
+        g2.DOM.attr(path.domElement, 'fill', 'none');
 
-        const style = stage.style;
+        const pather = g2.ext.pather();
 
-        const className = style.add({
-            'stroke': 'green',
-            'stroke-width': '10px'
-        });
+        pather
+            .setShift(0.5)
 
-        style
-            .render()
-            .then(() => {
-                g2.DOM.setAttrMap(path.domElement, {
-                    'class': className,
-                    'd': 'M 0 0 L 100 100'
-                });
-            })
-            .catch(e => {
-                console.log(e)
-            });     
+            .moveTo(10, 200)
+            .lineTo(30, 200)
+
+            .moveTo(50, 200)
+            .curveTo(60, 190, 70, 210, 80, 200)
+
+            .asRect(100, 190, 20, 20)
+
+            .asCircle(140, 200, 10)
+
+            .applyTo(path);
+
 
     </script>
 </body>

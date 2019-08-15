@@ -33,7 +33,7 @@
         // });
 
         for (let i = 0; i < 1000; i++) {
-            const pather = g2.SVG.path();
+            const pather = g2.ext.pather();
             const path = root.path();
             g2.DOM.setAttrMap(path.domElement, {
                 d: pather.moveTo(10, 10).lineTo(300 * Math.random(), 600 * Math.random()).get(),

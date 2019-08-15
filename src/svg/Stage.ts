@@ -8,6 +8,7 @@ import { Layer } from "./Layer";
 import { SyncQueue } from "../queue/SyncQueue";
 import { AsyncQueue } from "../queue/AsyncQueue";
 import { Style } from "./Style";
+import { Defs } from "./Defs";
 
 export class Stage implements IRenderable {
     public domElement: Nullable<SVGElement> = null;
@@ -15,6 +16,7 @@ export class Stage implements IRenderable {
     public container: Nullable<HTMLElement> = null;
     public queue: Nullable<IQueue> = null;
     public style: Nullable<Style> = null;
+    public defs: Nullable<Defs> = null;
 
     constructor(container: HTMLElement, public width: StringOrNumber = '100%', public height: StringOrNumber = '100%') {
         this.container = container;
@@ -28,6 +30,7 @@ export class Stage implements IRenderable {
         this.container.appendChild(this.domElement);
 
         this.style = new Style(this);
+        this.defs = new Defs(this);
 
 
         // DOM.addResizeHandler(this.container);
@@ -71,7 +74,8 @@ export class Stage implements IRenderable {
     }
 
     public dispose(): void {
-        this.container = null;
+        throw new Error('Unimplemented stage disposing.');
+        //this.container = null;
     }
 
 }

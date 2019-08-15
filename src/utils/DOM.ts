@@ -17,8 +17,10 @@ export namespace DOM {
      * 
      * @param name - Tag.
      */
-    export function createSVGElement(name: string): SVGElement {
-        return G2_GLOBAL.document.createElementNS(SVG_NS, name);
+    export function createSVGElement(name: string, attributes?: IStorage): SVGElement {
+        const el = G2_GLOBAL.document.createElementNS(SVG_NS, name);
+        setAttrMap(el, attributes);
+        return el;
     }
 
     export function attr(el: Element, key: string, value?: any, addPrefix?: boolean): Nullable<Element|string> {
@@ -29,7 +31,7 @@ export namespace DOM {
         return el.getAttribute(`${addPrefix ? G2_ATTR_PREFIX : ''}${key}`);
     }
 
-    export function setAttrMap(el: Element, map: Nullable<IStorage>, addPrefix?: boolean): Element {
+    export function setAttrMap(el: Element, map?: Nullable<IStorage>, addPrefix?: boolean): Element {
         if (map) {
             for (let key in map) { //This cycle does not create iterator, it's faster then forOf.
                 if (key.indexOf('g2_uid_')) //Skipping potential uid.

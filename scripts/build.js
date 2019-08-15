@@ -106,13 +106,15 @@ async function build() {
     const es6Build = path.join(TMP_DIR, 'es6', `${G2}.js`);
 
     await Promise.all([
-        generateBundledModule(es5Build, path.join(OUT_DIR, `${G2}.js`), 'cjs', false),
-        generateBundledModule(es5Build, path.join(OUT_DIR, `${G2}.min.js`), 'cjs', true),
+        // generateBundledModule(es5Build, path.join(OUT_DIR, `${G2}.js`), 'cjs', false),
+        // generateBundledModule(es5Build, path.join(OUT_DIR, `${G2}.min.js`), 'cjs', true),
 
         generateBundledModule(es5Build, path.join(OUT_DIR, `${G2}.module.js`), 'es', false),
 
         generateBundledModule(es6Build, path.join(OUT_DIR, `${G2}.es6.js`), 'es', false),
         generateBundledModule(es6Build, path.join(OUT_DIR, `${G2}.es6.min.js`), 'es', true),
+        generateBundledModule(es6Build, path.join(OUT_DIR, `${G2}.es6.umd.js`), 'umd', false),
+        generateBundledModule(es6Build, path.join(OUT_DIR, `${G2}.es6.umd.min.js`), 'umd', true),
 
         generateBundledModule(es5Build, path.join(OUT_DIR, `${G2}.umd.js`), 'umd', false),
         generateBundledModule(es5Build, path.join(OUT_DIR, `${G2}.umd.min.js`), 'umd', true)

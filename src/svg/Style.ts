@@ -23,7 +23,7 @@ export class Style extends G2Element {
         return DOM.createSVGElement('style');
     }
 
-    public add(config: IStorage, name: string = `g2_${utils.getUid()}`): string {
+    public add(config: IStorage, name: string = `${DOM.G2_ATTR_PREFIX}${utils.getUid()}`): string {
         //TODO Probably needs to add merging.
         this.stylesMap[name] = config;
         return name;
@@ -40,6 +40,7 @@ export class Style extends G2Element {
         }
         return `${rv}}`
     }
+
     public stringifyStylesMap(): string {
         this.styleString = '';
         for (let key in this.stylesMap) {
