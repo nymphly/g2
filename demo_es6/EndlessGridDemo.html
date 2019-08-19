@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Endless Grid Demo</title>
+
+    <style>
+        html,
+        body,
+        #container {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 
+        NOTE: run this demo with 'npm run server' to avoid cross-origin issues accessing g2.    
+     -->
+    <div id="container"></div>
+
+    <script type="module">
+        import './../out/g2.es6.umd.js';
+
+        const WIDTH = 800;
+        const HEIGHT = 600;
+        const SIZE = 30;
+
+        let offX = 0;
+        let offY = 0;
+        let dragging = false;
+
+        const stage = g2.stage('container', WIDTH, HEIGHT);
+        stage.domElement.style.border = '1px solid blue';
+        const root = stage.layer();
+
+        //Creating interceptor path. Maybe we can replace it with stage itself? 
+        const eventsInterceptor = root.path();
+        g2.DOM.setAttrMap(eventsInterceptor.domElement, {
+            fill: 'white',
+            d: `M 0 0 H ${WIDTH} V ${HEIGHT} H 0 Z`
+        });
+        
+        const path = root.path();
+        g2.DOM.setAttrMap(path.domElement, {
+            stroke: 'blue',
+            'stroke-width': 1,
+            fill: 'none'
+        });
+
+        const pather = g2.ext.pather().setShift(0.5);
+
+        /**
+         * Draws grid by current initial X and Y.
+         */ 
+        function drawState(x = 0, y = 0) {
+            pather.reset();
+            let currX = x;
+            let currY = y;
+            while (currX <= WIDTH) {
+                pather.moveTo(currX, 0).v(HEIGHT);
+                currX += SIZE;
+            }
+
+            while (currY <= HEIGHT) {
+                pather.moveTo(0, currY).h(WIDTH);
+                currY += SIZE;
+            }
+            pather.applyTo(path);
+        }
+
+        drawState();
+
+        root.domElement.addEventListener('mousewheel', (e) => {
+            e.preventDefault();
+
+            const dX = e.deltaX % SIZE;
+            const dY = e.deltaY % SIZE;
+            offX -= dX;
+            offY -= dY;
+
+            drawState(offX % SIZE, offY % SIZE);
+        })
+
+        // root.domElement.addEventListener('mousedown', (e) => {
+        //     dragging = true;
+        // });
+
+        // document.addEventListener('mousemove', (e) => {
+        //     if (dragging) {
+        //         console.log(e);
+        //     }
+        // });
+
+        // document.addEventListener('mouseup', (e) => {
+        //     if (dragging) {
+        //         console.log(e);
+        //     }
+        //     dragging = false;
+        // });
+
+    </script>
+</body>
+
+</html>
