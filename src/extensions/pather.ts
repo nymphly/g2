@@ -80,13 +80,14 @@ class Pather_ {
         return this.rv_;
     }
 
-    public reset(): Pather_ {
+    public clear(): Pather_ {
         this.rv_ = '';
         return this;
     }
 
-    public applyTo(path: Path): Pather_ {
-        DOM.attr(<SVGElement>path.domElement, 'd', this.rv_);
+    public applyTo(path: Path|SVGPathElement): Pather_ {
+        const el: SVGPathElement = path instanceof Path ? <SVGPathElement>path.domElement : path;
+        DOM.attr(el, 'd', this.rv_);
         return this;
     }
 

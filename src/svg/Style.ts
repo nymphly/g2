@@ -56,7 +56,7 @@ export class Style extends G2Element {
             .then(() => new Promise((resolve: Function, reject: Function) => {
                 const str = this.stringifyStylesMap();
                 if (str === '') {
-                    reject('Could not parse style to string.Looks like styles map is empty.');
+                    reject('Could not parse style to string. Looks like styles map is empty.');
                 } else {
                     (<SVGElement>this.domElement).innerHTML = str;
                     resolve();
