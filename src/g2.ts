@@ -12,7 +12,11 @@ import * as ext from './extensions/ext';
 declare const window: any;
 export const G2_GLOBAL = window || global; //TODO NodeJs support. Do we really need it? What about SSR?
 
-export function stage(container: (HTMLElement|string) = 'container', width: StringOrNumber = '100%', height: StringOrNumber = '100%'): Nullable<Stage> {
+export function stage(
+    container: (HTMLElement | string) = 'container',
+    width: StringOrNumber = '100%',
+    height: StringOrNumber = '100%'
+): Nullable<Stage> {
     const cont: (Nullable<HTMLElement>) = DOM.getElement(container);
     if (cont) {
         return new Stage(cont, width, height);
@@ -29,7 +33,7 @@ export function asyncQueue(shared: any = {}): AsyncQueue {
 }
 
 export {
-    DOM, 
+    DOM,
     SyncQueue,
     AsyncQueue,
     Stage,

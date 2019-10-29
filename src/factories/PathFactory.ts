@@ -8,13 +8,17 @@ export class PathFactory extends G2Element {
     private usedIndex_: number = 0;
     public styleName: string = '';
 
-    constructor(public stage: Stage, public parent: Nullable<G2Element>, styleConfig: IStorage = {stroke: '#000', fill: 'none'}, styleName?: string) {
+    constructor(
+        public stage: Stage,
+        public parent: Nullable<G2Element>,
+        styleConfig: IStorage = { stroke: '#000', fill: 'none' },
+        styleName?: string
+    ) {
         super(stage, parent);
         const style: Style = <Style>(this.stage.style);
         this.styleName = style.add(styleConfig, styleName);
-
     }
-    
+
     public createDom(): SVGElement {
         return DOM.createSVGElement('g');
     }
@@ -22,7 +26,7 @@ export class PathFactory extends G2Element {
     public add(): SVGPathElement {
         let path: SVGPathElement = this.pool[this.usedIndex_];
         if (!path) {
-            path = <SVGPathElement>DOM.createSVGElement('path', {class: this.styleName});
+            path = <SVGPathElement>DOM.createSVGElement('path', { class: this.styleName });
             this.pool.push(path);
         }
         this.usedIndex_++;
@@ -36,9 +40,4 @@ export class PathFactory extends G2Element {
         this.pool.forEach(el => DOM.setParent(el));
         this.usedIndex_ = 0;
     }
-
-
-
-
-
 }

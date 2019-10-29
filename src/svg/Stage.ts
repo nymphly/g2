@@ -18,7 +18,11 @@ export class Stage implements IRenderable {
     public style: Nullable<Style> = null;
     public defs: Nullable<Defs> = null;
 
-    constructor(container: HTMLElement, public width: StringOrNumber = '100%', public height: StringOrNumber = '100%') {
+    constructor(
+        container: HTMLElement,
+        public width: StringOrNumber = '100%',
+        public height: StringOrNumber = '100%'
+    ) {
         this.container = container;
         this.domElement = DOM.createSVGElement('svg');
         DOM.setAttrMap(this.domElement, {

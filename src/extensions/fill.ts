@@ -33,9 +33,13 @@ export namespace fill {
      * @param config - Confid. @see LinearGradientConfig definition.
      * @param id - Desired ID. Can overried existing one.
      */
-    export function linearGradient(el: G2Element, config: LinearGradientConfig, id: string | undefined): string {
-        const stage: Stage = el.stage;
-        const defs: Defs = <Defs>stage.defs;
+    export function linearGradient(
+        el: G2Element,
+        config: LinearGradientConfig,
+        id: string | undefined
+    ): string {
+        const { stage } = el;
+        const { defs } = <{ defs: Defs }>stage;
         const newId: string | undefined = config.attrs ? config.attrs.id || id : id;
 
         // Checks whether linearGradient with passed id already exists.
